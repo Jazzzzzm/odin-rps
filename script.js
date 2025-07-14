@@ -2,6 +2,13 @@
 console.log("Hello World");
 */
 
+/* Declaring div */
+const div = document.querySelector("#container");
+
+/* Variables to keep track of score*/
+let humanScore = 0;
+let computerScore = 0;
+
 /* Function to randomly return rock, paper, or scissors */
 function getComputerChoice(){
     let rand_num = Math.random()*3;
@@ -28,9 +35,10 @@ console.log(getHumanChoice());
 /* Function to simulate a game of rps and tell if the player won or not */
 function playRound(humanChoice, computerChoice){
     let win = 0;
+    const msg = document.createElement("p");
     if(humanChoice === computerChoice){
         win = 2;
-        console.log("Draw.")
+        msg.textContent = "Draw";
     }
     else if(humanChoice === "scissors"){
         if(computerChoice === "paper") {win = 1}
@@ -43,36 +51,43 @@ function playRound(humanChoice, computerChoice){
     }
 
     if(win === 1){
-        let message = "You win! " + humanChoice + " beats " + computerChoice;
-        console.log(message);
+        msg.textContent = "You win! " + humanChoice + " beats " + computerChoice;
         humanScore++;
+        console.log("win");
     }
     else if(win == 0){
-        let message = "You lose! " + computerChoice + " beats " + humanChoice;
-        console.log(message);
+        msg.textContent = "You lose! " + computerChoice + " beats " + humanChoice;
         computerScore++;
+        console.log("lose");
     }
+
+    const score = document.createElement("p");
+    score.textContent = "Human: " + humanScore + " || Computer: " + computerScore;
+    
+    div.textContent = '';
+    div.appendChild(msg);
+    div.appendChild(score);
+
+    /* Printing out end of game message if human or computer reaches 5 points */
+
+    let gameOverMsg = document.createElement("p");
+
+    if(humanScore == 5){
+        gameOverMsg.textContent = "You win!";
+    }
+    else if(computerScore == 5){
+        gameOverMsg.textContent = "You lose!";
+    }
+
+    div.appendChild(gameOverMsg);
 }
 
-/* Variables to keep track of score*/
-let humanScore = 0;
-let computerScore = 0;
+/* Adding Event Handler*/
+const buttonRock = document.querySelector("#rock");
+const buttonPaper = document.querySelector("#paper");
+const buttonScissors = document.querySelector("#scissors");
 
-/* For loop to play 5 rounds of rps*/
-for(let i = 0; i<5; i++){
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
+buttonRock.addEventListener("click", () => playRound('rock', getComputerChoice()));
+buttonPaper.addEventListener("click", () => playRound('paper', getComputerChoice()));
+buttonScissors.addEventListener("click", () => playRound('scissors', getComputerChoice()));
 
-    playRound(humanSelection, computerSelection);
-}
-
-/* Printing out end of game message */
-if(humanScore > computerScore){
-    console.log("You win!");
-}
-else if(humanScore < computerScore){
-    console.log("You lose.");
-}
-else{
-    console.log("Draw.")
-}
